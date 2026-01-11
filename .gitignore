@@ -137,3 +137,32 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+# Personal Messenger Bot
+
+This is a personal Facebook Messenger bot built for casual, human-like conversation.
+
+## Purpose
+- General conversation only
+- No business, no selling
+- Friendly, slightly playful tone
+- Acts as a representative of Sayed Ahmad
+
+## Features (Planned)
+- 100% rule-based logic
+- Human-like reply variation
+- Context-aware responses
+- Handles repeated questions smartly
+- No AI, no paid APIs
+- Free and lightweight
+
+## Tech Stack (Planned)
+- Node.js
+- Express
+- Facebook Messenger Webhook
+
+## Status
+🚧 Planning & setup phase  
+Bot logic and app integration will be added step by step.
+
+## Note
+This project is for learning and personal use only.
