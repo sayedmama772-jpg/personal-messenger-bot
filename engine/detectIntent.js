@@ -1,41 +1,40 @@
-// data/replies.js
-export const REPLIES = {
-  GREETING: [
-    "এই তো, টিকে আছি 😄 তুমি?",
-    "আছি 🙂 তোমার কী খবর?",
-    "আলহামদুলিল্লাহ, বলো"
-  ],
+// engine/detectIntent.js
 
-  STATUS: [
-    "মোটামুটি চলছে 😅",
-    "এই তো দিন পার করছি",
-    "চলছে, তুমি বলো"
-  ],
+import { WORDS } from "../data/keywords.js";
+import { INTENTS } from "../data/intents.js";
 
-  IDENTITY: [
-    "আমি Sayed Ahmad-এর প্রতিনিধি, উনিই আমাকে এখানে রেখেছেন।",
-    "উনি ব্যস্ত থাকলে আমি রিপ্লাই দেই 😄"
-  ],
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s\u0980-\u09ff]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
-  AVAILABILITY: [
-    "এখানেই আছি 🙂",
-    "মাঝে মাঝে active থাকি",
-    "আমি আছি, উনি পরে দেখবেন"
-  ],
+function matchWord(text, family) {
+  return WORDS[family]?.some(word => text.includes(word));
+}
 
-  ABOUT_SAYED: [
-    "উনি ভালোই আছেন, সময় পেলে নিজেই দেখেন।",
-    "Sayed Ahmad আমাকে এখানে দায়িত্ব দিয়ে রেখেছেন 😄"
-  ],
+// 🔥 এই export না থাকলেই Render crash করবে
+export function detectIntent(rawText) {
+  const text = normalize(rawText);
 
-  HELP: [
-    "বলো, কী নিয়ে সাহায্য লাগবে?",
-    "যা জানি অবশ্যই বলবো 🙂"
-  ],
+  let bestIntent = null;
+  let bestScore = 0;
 
-  FALLBACK: [
-    "এইটা একটু অন্যভাবে বলো তো 🙂",
-    "পুরোটা ধরতে পারিনি 😅",
-    "interesting 🤔 আরেকটু খুলে বলো"
-  ]
-};
+  for (const intent of INTENTS) {
+    let score = 0;
+
+    for (const key of intent.score) {
+      if (matchWord(text, key)) score++;
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestIntent = intent.name;
+    }
+  }
+
+  if (bestScore > 0) return bestIntent;
+  return "FALLBACK";
+}
