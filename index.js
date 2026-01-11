@@ -29,6 +29,9 @@ async function sendMessage(userId, text) {
     })
   });
 }
+app.get("/", (req, res) => {
+  res.status(200).send("Messenger bot is running ✅");
+});
 
 // ================= WEBHOOK VERIFY =================
 app.get("/webhook", (req, res) => {
